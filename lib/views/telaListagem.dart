@@ -19,7 +19,7 @@ class _TelaListagemState extends State<TelaListagem> {
   ];
 
   final Future<String> _espera =
-      Future<String>.delayed(const Duration(seconds: 3), () => "Retorno");
+      Future<String>.delayed(const Duration(milliseconds: 100), () => "Retorno");
 
   @override
   Widget build(BuildContext context) {
