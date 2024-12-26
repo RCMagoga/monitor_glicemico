@@ -1,3 +1,3 @@
-# monitor_glicemico
+# Monitor Glicêmico
 
-A new Flutter project.
+## Monitor de glicemia para mostrar os valores de glicemia coletado

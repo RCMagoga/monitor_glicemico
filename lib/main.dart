@@ -1,16 +1,34 @@
 import 'package:flutter/material.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  final ThemeData _tema = ThemeData(
+    appBarTheme: AppBarTheme(
+      color: Colors.blue,
+      titleTextStyle: TextStyle(
+        fontSize: 26,
+        color: Colors.black,
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "Monitor Glicêmico",
+      // Tema definido pela variavel "_tema" acima.
+      theme: _tema,
       home: Scaffold(
+        appBar: AppBar(
+          title: Text("Monitor Glicêmico"),
+          centerTitle: true,
+        ),
         body: Center(
           child: Text('Hello World!'),
         ),
