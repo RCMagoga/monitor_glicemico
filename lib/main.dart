@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/views/telaCadastro.dart';
+import 'package:monitor_glicemico/views/telaListagem.dart';
 
 void main() {
   runApp(MainApp());
@@ -30,7 +31,7 @@ class MainApp extends StatelessWidget {
           title: Text("Monitor Glicêmico"),
           centerTitle: true,
         ),
-        body: Telacadastro(),
+        body: TelaListagem(),
       ),
     );
   }

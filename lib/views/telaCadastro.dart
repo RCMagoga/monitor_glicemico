@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:monitor_glicemico/widgets/cardDados.dart';
 
 class Telacadastro extends StatefulWidget {
   const Telacadastro({super.key});
@@ -118,7 +119,7 @@ class _TelacadastroState extends State<Telacadastro> {
               color: Colors.white,
             ),
           ),
-        )
+        ),
       ],
     );
   }
