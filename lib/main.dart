@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monitor_glicemico/views/telaCadastro.dart';
 
 void main() {
   runApp(MainApp());
@@ -29,9 +30,7 @@ class MainApp extends StatelessWidget {
           title: Text("Monitor Glicêmico"),
           centerTitle: true,
         ),
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+        body: Telacadastro(),
       ),
     );
   }
