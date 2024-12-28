@@ -26,16 +26,24 @@ class _TelacadastroState extends State<Telacadastro> {
       agora = selecionado ?? agora;
     });
   }
+  // Controladores para recuperar dados e cadastrar no DB
+  final TextEditingController _controllerGlicemia = TextEditingController();
+
+  @override
+  void dispose(){
+    _controllerGlicemia.dispose();
+    super.dispose();
+  }
 
   // Lista para popular o 'ToggleButtons'
-  List<Widget> periodos = [
+  List<Text> periodos = [
     Text("Jejum"),
     Text("Almoço"),
     Text("Jantar"),
   ];
   // Lista retorna bool para seleção do 'ToggleButton'
   final List<bool> _periodosSelecionados = [
-    true,
+    false,
     false,
     false,
   ];
@@ -62,6 +70,7 @@ class _TelacadastroState extends State<Telacadastro> {
             SizedBox(
               width: 100,
               child: TextFormField(
+                controller: _controllerGlicemia,
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
                   hintStyle: TextStyle(fontSize: 18),
@@ -72,7 +81,6 @@ class _TelacadastroState extends State<Telacadastro> {
           ],
         ),
         ToggleButtons(
-          key: GlobalKey(debugLabel: "ToggleButton"),
           constraints: BoxConstraints(
               minWidth: (MediaQuery.of(context).size.width - 100) / 3,
               minHeight: 50),
@@ -106,7 +114,7 @@ class _TelacadastroState extends State<Telacadastro> {
         ),
         TextButton(
           onPressed: () async{
-            Db.salvarColeta();
+            Db.salvarColeta(dataFormatada.format(agora).toString(), _periodosSelecionados[0]  ? _controllerGlicemia.text : 0, _periodosSelecionados[1] ? _controllerGlicemia.text : 0, _periodosSelecionados[2] ? _controllerGlicemia.text : 0,);
           },
           style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Colors.blue),

@@ -4,13 +4,13 @@ import 'package:monitor_glicemico/models/coleta.dart';
 
 class CardDados extends StatelessWidget {
 
-  Coleta dados;
+  final Coleta dados;
 
   CardDados(this.dados, {super.key});
 
-  TextStyle dadosStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+  final TextStyle dadosStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
 
-  DateFormat format = DateFormat('dd/MM/yyyy');
+  final DateFormat format = DateFormat('dd/MM/yyyy');
 
   @override
   Widget build(BuildContext context) {
