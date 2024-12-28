@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:monitor_glicemico/widgets/cardDados.dart';
+import 'package:monitor_glicemico/data/db.dart';
 
 class Telacadastro extends StatefulWidget {
   const Telacadastro({super.key});
@@ -105,9 +105,11 @@ class _TelacadastroState extends State<Telacadastro> {
           ),
         ),
         TextButton(
-          onPressed: () {},
+          onPressed: () async{
+            Db.salvarColeta();
+          },
           style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.green),
+            backgroundColor: WidgetStatePropertyAll(Colors.blue),
             minimumSize: WidgetStatePropertyAll(
               Size(MediaQuery.of(context).size.width - 100, 50),
             ),

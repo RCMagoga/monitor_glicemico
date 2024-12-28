@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:monitor_glicemico/models/coleta.dart';
 
 class CardDados extends StatelessWidget {
-  CardDados({super.key});
+
+  Coleta dados;
+
+  CardDados(this.dados, {super.key});
 
   TextStyle dadosStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.bold);
+
+  DateFormat format = DateFormat('dd/MM/yyyy');
 
   @override
   Widget build(BuildContext context) {
@@ -14,26 +21,26 @@ class CardDados extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text("DATA", style: dadosStyle,),
+            Text(format.format(dados.date), style: dadosStyle,),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("Jejum"),
-                Text("96", style: dadosStyle,),
+                Text(dados.jejum.toString(), style: dadosStyle,),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("Almoço"),
-                Text("96", style: dadosStyle,),
+                Text(dados.almoco.toString(), style: dadosStyle,),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("Jantar"),
-                Text("96", style: dadosStyle,),
+                Text(dados.jantar.toString(), style: dadosStyle,),
               ],
             ),
           ],

@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:monitor_glicemico/data/db.dart';
+import 'package:monitor_glicemico/models/coleta.dart';
 import 'package:monitor_glicemico/widgets/cardDados.dart';
 
 class TelaListagem extends StatefulWidget {
@@ -9,22 +12,10 @@ class TelaListagem extends StatefulWidget {
 }
 
 class _TelaListagemState extends State<TelaListagem> {
-  final List<String> lista = [
-    "Teste1",
-    "Teste2",
-    "Teste3",
-    "Teste4",
-    "Teste5",
-    "Teste6",
-  ];
-
-  final Future<String> _espera =
-      Future<String>.delayed(const Duration(milliseconds: 100), () => "Retorno");
-
   @override
   Widget build(BuildContext context) {
     return FutureBuilder(
-      future: _espera,
+      future: Db.buscarColetas(),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return ListView.separated(
@@ -33,9 +24,19 @@ class _TelaListagemState extends State<TelaListagem> {
             ),
             shrinkWrap: true,
             padding: EdgeInsets.only(top: 10),
-            itemCount: lista.length,
+            itemCount: snapshot.data?.length ?? 0,
             itemBuilder: (context, index) {
-              return CardDados();
+              if (snapshot.hasData) {
+                return CardDados(Coleta(
+                  DateFormat('dd/MM/yyyy').parse(snapshot.data![index]['data']),
+                  snapshot.data![index]['jejum'],
+                  snapshot.data![index]['almoco'],
+                  snapshot.data![index]['jantar'],
+                  id: snapshot.data![index]['id'],
+                ));
+              } else {
+                return CircularProgressIndicator();
+              }
             },
           );
         } else {
