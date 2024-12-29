@@ -26,11 +26,12 @@ class _TelacadastroState extends State<Telacadastro> {
       agora = selecionado ?? agora;
     });
   }
+
   // Controladores para recuperar dados e cadastrar no DB
   final TextEditingController _controllerGlicemia = TextEditingController();
 
   @override
-  void dispose(){
+  void dispose() {
     _controllerGlicemia.dispose();
     super.dispose();
   }
@@ -50,87 +51,145 @@ class _TelacadastroState extends State<Telacadastro> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 20,
-      children: <Widget>[
-        SizedBox(
-          height: 10,
+    return Scaffold(
+      appBar: AppBar(
+        centerTitle: true,
+        title: Text(
+          "Monitor Glicemico",
+          style: TextStyle(
+            color: Colors.white,
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        Text(
-          "Cadastrar Glicemia",
-          style: TextStyle(fontSize: 28),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
-          children: <Widget>[
-            Text(
-              "Glicemia:",
-              style: TextStyle(fontSize: 18),
-            ),
-            SizedBox(
-              width: 100,
-              child: TextFormField(
-                controller: _controllerGlicemia,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                  hintStyle: TextStyle(fontSize: 18),
-                  hintText: "Ex: 96",
+        backgroundColor: Theme.of(context).colorScheme.primary,
+      ),
+      body: Column(
+        spacing: 20,
+        children: <Widget>[
+          SizedBox(
+            height: 10,
+          ),
+          Text(
+            "Cadastrar Glicemia",
+            style: TextStyle(fontSize: 28),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: <Widget>[
+              Text(
+                "Glicemia:",
+                style: TextStyle(fontSize: 18),
+              ),
+              SizedBox(
+                width: 100,
+                child: TextFormField(
+                  controller: _controllerGlicemia,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                    hintStyle: TextStyle(fontSize: 18),
+                    hintText: "Ex: 96",
+                  ),
                 ),
               ),
+            ],
+          ),
+          ToggleButtons(
+            constraints: BoxConstraints(
+                minWidth: (MediaQuery.of(context).size.width - 100) / 3,
+                minHeight: 50),
+            isSelected: _periodosSelecionados,
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            selectedBorderColor: Colors.blue,
+            selectedColor: Colors.white,
+            fillColor: Colors.blue,
+            color: Colors.black,
+            textStyle: TextStyle(fontSize: 18),
+            onPressed: (index) {
+              setState(
+                () {
+                  for (var i = 0; i < _periodosSelecionados.length; i++) {
+                    _periodosSelecionados[i] = i == index ? true : false;
+                  }
+                },
+              );
+            },
+            children: periodos,
+          ),
+          OutlinedButton(
+            style: ButtonStyle(
+                minimumSize: WidgetStatePropertyAll(
+                    Size(MediaQuery.of(context).size.width - 100, 50))),
+            onPressed: () => _selectDate(context),
+            child: Text(
+              dataFormatada.format(agora),
+              style: TextStyle(fontSize: 22, color: Colors.blue),
             ),
-          ],
-        ),
-        ToggleButtons(
-          constraints: BoxConstraints(
-              minWidth: (MediaQuery.of(context).size.width - 100) / 3,
-              minHeight: 50),
-          isSelected: _periodosSelecionados,
-          borderRadius: BorderRadius.all(Radius.circular(25)),
-          selectedBorderColor: Colors.blue,
-          selectedColor: Colors.white,
-          fillColor: Colors.blue,
-          color: Colors.black,
-          textStyle: TextStyle(fontSize: 18),
-          onPressed: (index) {
-            setState(
-              () {
+          ),
+          TextButton(
+            onPressed: () async {
+              int validado = validacaoCampos();
+              if (validado == 0) {
+                Db.salvarColeta(
+                  dataFormatada.format(agora).toString(),
+                  _periodosSelecionados[0] ? _controllerGlicemia.text : 0,
+                  _periodosSelecionados[1] ? _controllerGlicemia.text : 0,
+                  _periodosSelecionados[2] ? _controllerGlicemia.text : 0,
+                );
+                _controllerGlicemia.text = "";
                 for (var i = 0; i < _periodosSelecionados.length; i++) {
-                  _periodosSelecionados[i] = i == index ? true : false;
+                  _periodosSelecionados[i] = false;
                 }
-              },
-            );
-          },
-          children: periodos,
-        ),
-        OutlinedButton(
-          style: ButtonStyle(
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text("Dados cadastrados com sucesso!"),
+                    backgroundColor: Colors.green,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              } else {
+                String erro = "";
+                if (validado == 1) {
+                  erro = "Por favor, insira o valor da glicemia!";
+                } else {
+                  erro = "Por favor, selecione o período da coleta!";
+                }
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(erro),
+                    backgroundColor: Colors.red,
+                    duration: Duration(seconds: 2),
+                  ),
+                );
+              }
+            },
+            style: ButtonStyle(
+              backgroundColor: WidgetStatePropertyAll(Colors.blue),
               minimumSize: WidgetStatePropertyAll(
-                  Size(MediaQuery.of(context).size.width - 100, 50))),
-          onPressed: () => _selectDate(context),
-          child: Text(
-            dataFormatada.format(agora),
-            style: TextStyle(fontSize: 22, color: Colors.blue),
-          ),
-        ),
-        TextButton(
-          onPressed: () async{
-            Db.salvarColeta(dataFormatada.format(agora).toString(), _periodosSelecionados[0]  ? _controllerGlicemia.text : 0, _periodosSelecionados[1] ? _controllerGlicemia.text : 0, _periodosSelecionados[2] ? _controllerGlicemia.text : 0,);
-          },
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(Colors.blue),
-            minimumSize: WidgetStatePropertyAll(
-              Size(MediaQuery.of(context).size.width - 100, 50),
+                Size(MediaQuery.of(context).size.width - 100, 50),
+              ),
+            ),
+            child: Text(
+              "Salvar",
+              style: TextStyle(
+                fontSize: 18,
+                color: Colors.white,
+              ),
             ),
           ),
-          child: Text(
-            "Salvar",
-            style: TextStyle(
-              fontSize: 18,
-              color: Colors.white,
-            ),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
+  }
+
+  int validacaoCampos() {
+    if (_controllerGlicemia.text == "") {
+      return 1;
+    }
+    for (bool b in _periodosSelecionados) {
+      if (b) {
+        return 0;
+      }
+    }
+    return 2;
   }
 }

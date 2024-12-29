@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/views/telaCadastro.dart';
+import 'package:monitor_glicemico/views/telaEdicao.dart';
 import 'package:monitor_glicemico/views/telaListagem.dart';
 
 void main() {
@@ -19,7 +20,8 @@ class _MainAppState extends State<MainApp> {
       color: Colors.blue,
       titleTextStyle: TextStyle(
         fontSize: 26,
-        color: Colors.black,
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
       ),
     ),
   );
@@ -46,12 +48,14 @@ class _MainAppState extends State<MainApp> {
       debugShowCheckedModeBanner: false,
       title: "Monitor Glicêmico",
       // Tema definido pela variavel "_tema" acima.
-      theme: _tema,
+      theme: ThemeData(
+        useMaterial3: true,
+        colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.blue,
+            primary: Colors.blue,
+            brightness: Brightness.light),
+      ),
       home: Scaffold(
-        appBar: AppBar(
-          title: Text("Monitor Glicêmico"),
-          centerTitle: true,
-        ),
         body: _telas[_telaSelecionada],
         bottomNavigationBar: BottomNavigationBar(
           items: const <BottomNavigationBarItem>[

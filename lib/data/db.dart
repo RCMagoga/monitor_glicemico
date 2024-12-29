@@ -18,7 +18,7 @@ class Db {
     return db;
   }
 
-  static void salvarColeta(String date, jejum, almoco, jantar) async {
+  static Future<void> salvarColeta(String date, jejum, almoco, jantar) async {
     Database db = await openDb();
 
     List<Map> busca =
@@ -59,5 +59,11 @@ class Db {
     List<Map> lista =
         await db.rawQuery("SELECT * FROM coletas ORDER BY data ASC");
     return lista;
+  }
+
+  static Future<int> deletarColeta(String data) async{
+    Database db = await openDb();
+    var resposta = await db.delete('coletas', where: 'data = ?', whereArgs: [data]);
+    return resposta;
   }
 }

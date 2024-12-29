@@ -18,6 +18,7 @@ class CardDados extends StatelessWidget {
       width: MediaQuery.of(context).size.width - 10,
       height: 80,
       child: Card(
+        elevation: 4,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
