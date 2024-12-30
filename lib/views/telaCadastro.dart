@@ -29,6 +29,7 @@ class _TelacadastroState extends State<Telacadastro> {
 
   // Controladores para recuperar dados e cadastrar no DB
   final TextEditingController _controllerGlicemia = TextEditingController();
+  final TextEditingController _controllerObs = TextEditingController();
 
   @override
   void dispose() {
@@ -125,6 +126,25 @@ class _TelacadastroState extends State<Telacadastro> {
               style: TextStyle(fontSize: 22, color: Colors.blue),
             ),
           ),
+          Container(
+            alignment: Alignment.centerLeft,
+            margin: EdgeInsets.only(left: 50),
+            child: Text(
+              "Observações:",
+              style: TextStyle(fontSize: 18),
+            ),
+          ),
+          SizedBox(
+            width: MediaQuery.of(context).size.width - 100,
+            child: TextField(
+              controller: _controllerObs,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                hintStyle: TextStyle(fontSize: 18),
+                border: OutlineInputBorder(),
+              ),
+            ),
+          ),
           TextButton(
             onPressed: () async {
               int validado = validacaoCampos();
@@ -134,6 +154,9 @@ class _TelacadastroState extends State<Telacadastro> {
                   _periodosSelecionados[0] ? _controllerGlicemia.text : 0,
                   _periodosSelecionados[1] ? _controllerGlicemia.text : 0,
                   _periodosSelecionados[2] ? _controllerGlicemia.text : 0,
+                  _periodosSelecionados[0] ? _controllerObs.text : "-",
+                  _periodosSelecionados[1] ? _controllerObs.text : "-",
+                  _periodosSelecionados[2] ? _controllerObs.text : "-",
                 );
                 _controllerGlicemia.text = "";
                 for (var i = 0; i < _periodosSelecionados.length; i++) {

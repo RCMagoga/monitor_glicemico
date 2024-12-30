@@ -15,10 +15,19 @@ class Db {
             "CREATE TABLE coletas (id INTEGER PRIMARY KEY, data DATE, jejum INTEGER, almoco INTEGER, jantar INTEGER)");
       },
     );
+
+    List<Map> resultado = await db.rawQuery("SELECT * FROM coletas");
+    if (resultado.first['obsJejum'] == null) {
+      db.execute("ALTER TABLE coletas ADD obsJejum TEXT DEFAULT '-'");
+      db.execute("ALTER TABLE coletas ADD obsAlmoco TEXT DEFAULT '-'");
+      db.execute("ALTER TABLE coletas ADD obsJantar TEXT DEFAULT '-'");
+    }
+
     return db;
   }
 
-  static Future<void> salvarColeta(String date, jejum, almoco, jantar) async {
+  static Future<void> salvarColeta(String date, jejum, almoco, jantar, obsJejum,
+      obsAlmoco, obsJantar) async {
     Database db = await openDb();
 
     List<Map> busca =
@@ -27,26 +36,27 @@ class Db {
     if (busca.isNotEmpty) {
       if (jejum == 0) {
         jejum = busca.first['jejum'];
-      } 
-      if(almoco == 0){
+      }
+      if (almoco == 0) {
         almoco = busca.first['almoco'];
       }
-      if(jantar == 0){
+      if (jantar == 0) {
         jantar = busca.first['jantar'];
       }
       await db.transaction(
         (txn) async {
           await txn.rawUpdate(
-              'UPDATE coletas SET jejum = ?, almoco = ?, jantar = ? WHERE data = ?',
-              [jejum, almoco, jantar, date]);
+              'UPDATE coletas SET jejum = ?, almoco = ?, jantar = ?, obsJejum = ?, obsAlmoco = ?, obsJantar = ? WHERE data = ?',
+              [jejum, almoco, jantar, obsJejum, obsAlmoco, obsJantar, date]);
         },
       );
     } else {
       await db.transaction(
         (txn) async {
           await txn.rawInsert(
-              "INSERT INTO coletas(data, jejum, almoco, jantar) VALUES (?, ?, ?, ?)",
-              [date, jejum, almoco, jantar]);
+            "INSERT INTO coletas(data, jejum, almoco, jantar, obsJejum, obsAlmoco, obsJantar) VALUES (?, ?, ?, ?, ?, ?, ?)",
+            [date, jejum, almoco, jantar, obsJejum, obsAlmoco, obsJantar],
+          );
         },
       );
     }
@@ -61,9 +71,10 @@ class Db {
     return lista;
   }
 
-  static Future<int> deletarColeta(String data) async{
+  static Future<int> deletarColeta(String data) async {
     Database db = await openDb();
-    var resposta = await db.delete('coletas', where: 'data = ?', whereArgs: [data]);
+    var resposta =
+        await db.delete('coletas', where: 'data = ?', whereArgs: [data]);
     return resposta;
   }
 }

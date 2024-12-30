@@ -14,8 +14,6 @@ class TelaListagem extends StatefulWidget {
 }
 
 class _TelaListagemState extends State<TelaListagem> {
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,8 +33,7 @@ class _TelaListagemState extends State<TelaListagem> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             return SlidableAutoCloseBehavior(
-              child: ListView.separated(
-                separatorBuilder: (context, index) => Spacer(),
+              child: ListView.builder(
                 shrinkWrap: true,
                 padding: EdgeInsets.only(top: 10, left: 5),
                 itemCount: snapshot.data?.length ?? 0,
@@ -204,16 +201,18 @@ class _TelaListagemState extends State<TelaListagem> {
     );
   }
 
-  void refresh() {
+  void refresh() async {
+    Db.buscarColetas;
     setState(
-      () {},
-    );
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text("Dados atualizados com sucesso!"),
-        backgroundColor: Colors.blue,
-        duration: Duration(seconds: 2),
-      ),
+      () {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Dados atualizados com sucesso!"),
+            backgroundColor: Colors.blue,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      },
     );
   }
 }

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
-import 'package:monitor_glicemico/views/telaListagem.dart';
 
 class TelaEdicao extends StatefulWidget {
   final Coleta _coleta;
@@ -50,6 +49,7 @@ class _TelaEdicaoState extends State<TelaEdicao> {
     _controlleJejum.dispose();
     _controllerAlmoco.dispose();
     _controllerJantar.dispose();
+    widget.refresh();
     super.dispose();
   }
 
@@ -175,11 +175,12 @@ class _TelaEdicaoState extends State<TelaEdicao> {
                             _controlleJejum.text,
                             _controllerAlmoco.text,
                             _controllerJantar.text,
-                          ).then(
-                            (value) => widget.refresh,
+                            "-",
+                            "-",
+                            "-",
                           );
-                          Navigator.of(context).pop();
-                          Navigator.of(context).pop();
+                          Navigator.pop(context);
+                          Navigator.pop(context);
                         },
                         child: Text('Sim'),
                       ),
@@ -207,5 +208,4 @@ class _TelaEdicaoState extends State<TelaEdicao> {
       ),
     );
   }
-
 }
