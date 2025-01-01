@@ -2,18 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
+import 'package:provider/provider.dart';
 
-class TelaEdicao extends StatefulWidget {
+class TelaEdicao extends StatefulWidget{
   final Coleta _coleta;
-  final Function refresh;
+  final BuildContext telaListagemContext;
 
-  const TelaEdicao(this._coleta, this.refresh, {super.key});
+  const TelaEdicao(this._coleta, this.telaListagemContext, {super.key});
 
   @override
   State<TelaEdicao> createState() => _TelaEdicaoState();
 }
 
 class _TelaEdicaoState extends State<TelaEdicao> {
+
+  Db db = Db();
+
   late DateTime agora = widget._coleta.date;
 
   final TextEditingController _controlleJejum = TextEditingController();
@@ -49,7 +53,6 @@ class _TelaEdicaoState extends State<TelaEdicao> {
     _controlleJejum.dispose();
     _controllerAlmoco.dispose();
     _controllerJantar.dispose();
-    widget.refresh();
     super.dispose();
   }
 
@@ -170,7 +173,7 @@ class _TelaEdicaoState extends State<TelaEdicao> {
                       ),
                       TextButton(
                         onPressed: () {
-                          Db.salvarColeta(
+                          db.salvarColeta(
                             dataFormatada.format(agora).toString(),
                             _controlleJejum.text,
                             _controllerAlmoco.text,

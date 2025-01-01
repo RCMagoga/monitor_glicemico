@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/views/telaCadastro.dart';
 import 'package:monitor_glicemico/views/telaListagem.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(MainApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (context) => Db(),
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatefulWidget {

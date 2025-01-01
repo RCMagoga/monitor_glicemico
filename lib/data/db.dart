@@ -1,7 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-class Db {
-  static Future<Database> openDb() async {
+class Db extends ChangeNotifier {
+
+  static final Db _db = Db._internal();
+
+  factory Db(){
+    return _db;
+  }
+
+  Db._internal();
+
+  Future<Database> openDb() async {
     var dbPath = getDatabasesPath();
     String path = "$dbPath + /database.db";
 
@@ -26,7 +36,7 @@ class Db {
     return db;
   }
 
-  static Future<void> salvarColeta(String date, jejum, almoco, jantar, obsJejum,
+  Future<void> salvarColeta(String date, jejum, almoco, jantar, obsJejum,
       obsAlmoco, obsJantar) async {
     Database db = await openDb();
 
@@ -42,6 +52,15 @@ class Db {
       }
       if (jantar == 0) {
         jantar = busca.first['jantar'];
+      }
+      if (obsJejum == '-') {
+        obsJejum = busca.first['obsJejum'];
+      }
+      if (obsAlmoco == '-') {
+        obsAlmoco = busca.first['obsAlmoco'];
+      }
+      if (obsJantar == '-') {
+        obsJantar = busca.first['obsJantar'];
       }
       await db.transaction(
         (txn) async {
@@ -60,21 +79,22 @@ class Db {
         },
       );
     }
-
-    db.close();
+    notifyListeners();
   }
 
-  static Future<List<Map>> buscarColetas() async {
+  Future<List<Map>> buscarColetas() async {
     Database db = await openDb();
     List<Map> lista =
         await db.rawQuery("SELECT * FROM coletas ORDER BY data ASC");
     return lista;
   }
 
-  static Future<int> deletarColeta(String data) async {
+  Future<int> deletarColeta(String data) async {
     Database db = await openDb();
     var resposta =
         await db.delete('coletas', where: 'data = ?', whereArgs: [data]);
+    notifyListeners();
     return resposta;
   }
+
 }

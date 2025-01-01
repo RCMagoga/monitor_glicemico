@@ -10,6 +10,7 @@ class Telacadastro extends StatefulWidget {
 }
 
 class _TelacadastroState extends State<Telacadastro> {
+  Db db = Db();
   // Armazena a data, inicialmente a do dispositivo, depois é alterada por escolha do usuário
   DateTime agora = DateTime.now();
   // Formata a data
@@ -149,7 +150,7 @@ class _TelacadastroState extends State<Telacadastro> {
             onPressed: () async {
               int validado = validacaoCampos();
               if (validado == 0) {
-                Db.salvarColeta(
+                db.salvarColeta(
                   dataFormatada.format(agora).toString(),
                   _periodosSelecionados[0] ? _controllerGlicemia.text : 0,
                   _periodosSelecionados[1] ? _controllerGlicemia.text : 0,
