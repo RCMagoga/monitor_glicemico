@@ -31,7 +31,7 @@ class MainApp extends StatelessWidget {
       theme: temaPadrao,
       home: Scaffold(
         body: Center(
-          child: TelaListagem(),
+          child: TelaCadastro(),
         ),
       ),
     );
