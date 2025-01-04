@@ -81,8 +81,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
           ),
           //---------------------------------------------------------------------- Botão salvar
           TextButton(
-            onPressed: () async{
-              List<dynamic> alertaAcao = [];
+            onPressed: () async {
+              List<dynamic> alertaAcao = ["", ""];
               //----------------------------------------- Validação com msg erro
               alertaAcao = validacao();
               //----------------------------------------- Salvar no banco de dados com msg
@@ -94,6 +94,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 SnackBar(
                   content: Text(alertaAcao[0]),
                   backgroundColor: alertaAcao[1],
+                  duration: Duration(seconds: 2),
                 ),
               );
             },
@@ -128,28 +129,27 @@ class _TelaCadastroState extends State<TelaCadastro> {
 
   // Faz a validação dos dados antes do cadastro para o db e retorna msg para o usuário
   List<dynamic> validacao() {
-    List<dynamic> resposta = [];
+    List<dynamic> resposta = ["", ""];
     String msgErro = "";
     try {
       valorGlicemia = int.parse(_controllerGlicemia.text);
       if (valorGlicemia <= 0) {
         msgErro = "Digite um valor válido para glicemia!";
+      } else if (periodoSelecionado == "") {
+        msgErro = "Selecione o período da coleta!";
       }
     } catch (e) {
       msgErro = "Digite apenas numeros para glicemia!";
     }
-    if (periodoSelecionado == "") {
-      msgErro = "Selecione o período da coleta!";
-    }
-    resposta.add(msgErro);
-    resposta.add(Colors.red);
-    return resposta[0] != [] ? resposta : [];
+    resposta[0] = msgErro;
+    resposta[1] = Colors.red;
+    return resposta.first != "" ? resposta : ["", ""];
   }
 
   // Faz o salvamento no banco de dados e retorna msg para o usuário
   Future<List<dynamic>> salvar() async {
     Db db = Db();
-    List<int> valorPeriodo = [0 , 0, 0];
+    List<int> valorPeriodo = [0, 0, 0];
     List<String> obsPeriodo = ["", "", ""];
     if (periodoSelecionado == "Jejum") {
       valorPeriodo[0] = int.parse(_controllerGlicemia.text);
@@ -165,14 +165,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
       Coleta(dataSelecionada, valorPeriodo[0], valorPeriodo[1], valorPeriodo[2],
           obsPeriodo[0], obsPeriodo[1], obsPeriodo[1]),
     );
-    List<dynamic> resposta = [];
+    List<dynamic> resposta = ["", ""];
     if (id >= 0) {
-      resposta.add("Dados salvas!");
-      resposta.add(Colors.green);
+      resposta[0] = "Dados salvos com sucesso!";
+      resposta[1] = Colors.green;
       limparTela();
     } else {
-      resposta.add("Erro ao salvar no banco de dados!");
-      resposta.add(Colors.red);
+      resposta[0] = "Erro ao salvar no banco de dados!";
+      resposta[1] = Colors.red;
     }
     return resposta;
   }
