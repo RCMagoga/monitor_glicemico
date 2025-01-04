@@ -9,7 +9,7 @@ class MainApp extends StatelessWidget {
   MainApp({super.key});
 
   // Configura um tema padrão para o app
-  ThemeData temaPadrao = ThemeData(
+  final ThemeData temaPadrao = ThemeData(
     primarySwatch: Colors.blue,
     appBarTheme: AppBarTheme(
       centerTitle: true,

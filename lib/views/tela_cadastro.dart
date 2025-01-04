@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
+import 'package:monitor_glicemico/widgets/tela_cadastro/botao_Data.dart';
+import 'package:monitor_glicemico/widgets/tela_cadastro/botao_periodos.dart';
 
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
@@ -9,22 +10,11 @@ class TelaCadastro extends StatefulWidget {
 }
 
 class _TelaCadastroState extends State<TelaCadastro> {
-  // Inicializa a variavel data para controle da data em OutLineButton
-  DateTime agora = DateTime.now();
-  // Formatação padrão de apresentação de datas
-  DateFormat formatacaoPadrao = DateFormat('dd/MM/yyyy');
-  // Lista para gerar as opções do momento da coleta
-  final List<Text> _periodos = [
-    Text("Jejum"),
-    Text("Almoço"),
-    Text("Jantar"),
-  ];
-  // Armazena o item que foi selecionada na lista _periodos
-  final List<bool> _periodoSelecionado = [
-    true,
-    false,
-    false,
-  ];
+  // Armazena a data selecionada no widget 'BotaoData'
+  DateTime dataSelecionada = DateTime.now();
+  // Armazena o período selecionado no widget 'BotaoPeriodo'
+  String periodoSelecionado = "";
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,44 +48,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
             ],
           ),
           //---------------------------------------------------------------------- Botão seleção período
-          ToggleButtons(
-            constraints: BoxConstraints(
-                minWidth: (MediaQuery.of(context).size.width - 100) / 3,
-                minHeight: 50),
-            isSelected: _periodoSelecionado,
-            borderRadius: BorderRadius.all(Radius.circular(25)),
-            selectedBorderColor: Colors.blue,
-            selectedColor: Colors.white,
-            fillColor: Colors.blue,
-            color: Colors.black,
-            textStyle: TextStyle(fontSize: 18),
-            onPressed: (index) {
-              setState(() {
-                // Faz a troca do botão selecionado
-                for (var i = 0; i < _periodoSelecionado.length; i++) {
-                  if (i == index) {
-                    _periodoSelecionado[i] = true;
-                  } else {
-                    _periodoSelecionado[i] = false;
-                  }
-                }
-              });
-            },
-            children: _periodos,
-          ),
+          BotaoPeriodos(setPeriodoSelecionado),
           //---------------------------------------------------------------------- Botão seleção da data
-          OutlinedButton(
-            style: ButtonStyle(
-                minimumSize: WidgetStatePropertyAll(
-                    Size(MediaQuery.of(context).size.width - 100, 50))),
-            onPressed: () {
-              _selectDate(context);
-            },
-            child: Text(
-              formatacaoPadrao.format(agora),
-              style: TextStyle(fontSize: 22, color: Colors.blue),
-            ),
-          ),
+          BotaoData(setDataSelecionada),
           //---------------------------------------------------------------------- Texto e TextField Observações
           Container(
             alignment: Alignment.centerLeft,
@@ -117,7 +72,9 @@ class _TelaCadastroState extends State<TelaCadastro> {
           ),
           //---------------------------------------------------------------------- Botão salvar
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              
+            },
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(Colors.blue),
               minimumSize: WidgetStatePropertyAll(
@@ -136,17 +93,12 @@ class _TelaCadastroState extends State<TelaCadastro> {
       ),
     );
   }
-
-  // Abre a tela para selecionar a data e recarrega a tela com a data selecionada
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? selecionado = await showDatePicker(
-      context: context,
-      initialDate: DateTime(agora.year, agora.month, agora.day),
-      firstDate: DateTime(2022),
-      lastDate: DateTime(2030),
-    );
-    setState(() {
-      agora = selecionado ?? agora;
-    });
+  // Metodo set para alterar a data selecionada
+  void setDataSelecionada(DateTime data){
+    dataSelecionada = data;
+  }
+  // Método set para alterar o período selecionado
+  void setPeriodoSelecionado(String periodo){
+    periodoSelecionado = periodo;
   }
 }
