@@ -1,18 +1,36 @@
 import 'package:flutter/material.dart';
+import 'package:monitor_glicemico/views/tela_cadastro.dart';
 
 void main() {
-  runApp(const MainApp());
+  runApp(MainApp());
 }
 
 class MainApp extends StatelessWidget {
-  const MainApp({super.key});
+  MainApp({super.key});
+
+  // Configura um tema padrão para o app
+  ThemeData temaPadrao = ThemeData(
+    primarySwatch: Colors.blue,
+    appBarTheme: AppBarTheme(
+      centerTitle: true,
+      backgroundColor: Colors.blue,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontSize: 28,
+        fontWeight: FontWeight.bold,
+      ),
+    ),
+  );
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      title: "Monitor de Glicemia",
+      theme: temaPadrao,
       home: Scaffold(
         body: Center(
-          child: Text('Hello World!'),
+          child: TelaCadastro(),
         ),
       ),
     );

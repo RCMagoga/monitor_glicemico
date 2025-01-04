@@ -1,3 +1,3 @@
-# monitor_glicemico
+# Monitor Glicêmico
 
-A new Flutter project.
+Faz o monitoramente da glicemia com os dados coletados externamente.
