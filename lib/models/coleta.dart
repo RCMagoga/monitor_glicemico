@@ -1,3 +1,6 @@
+/*
+  Modelo usado para cada coleta
+*/
 class Coleta {
   int? id;
   DateTime data;

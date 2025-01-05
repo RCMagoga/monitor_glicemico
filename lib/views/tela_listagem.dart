@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/widgets/tela_listagem/slidable_card.dart';
-
+/*
+  Tela criada para o usuário ver a lista de dados cadastradas
+*/
 class TelaListagem extends StatefulWidget {
   const TelaListagem({super.key});
 
@@ -19,9 +21,11 @@ class _TelaListagemState extends State<TelaListagem> {
       body: FutureBuilder(
         future: Db().buscarColetas(),
         builder: (context, snapshot) {
+          // Carrega os dados na tela quando forem recuperados do banco de dados
           if (snapshot.hasData &&
               snapshot.connectionState == ConnectionState.done) {
             return SlidableCard(snapshot.data!);
+          // Apresneta msg para o caso de não ter dados no banco de dados
           } else if (snapshot.connectionState == ConnectionState.done &&
               !snapshot.hasData) {
             return Center(
@@ -30,6 +34,7 @@ class _TelaListagemState extends State<TelaListagem> {
                 style: TextStyle(fontSize: 22),
               ),
             );
+          // Apresenta msg de erro caso ocorra um erro na conexão com o banco de dados
           } else if (!snapshot.hasError && snapshot.connectionState == ConnectionState.done) {
             return Center(
               child: Text(
@@ -37,6 +42,7 @@ class _TelaListagemState extends State<TelaListagem> {
                 style: TextStyle(fontSize: 22),
               ),
             );
+          // Apresenta um circulo de carregamento durante a busco por dados no banco de dados
           } else {
             return Center(
               child: CircularProgressIndicator(),

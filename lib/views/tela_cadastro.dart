@@ -3,7 +3,9 @@ import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
 import 'package:monitor_glicemico/widgets/tela_cadastro/botao_Data.dart';
 import 'package:monitor_glicemico/widgets/tela_cadastro/botao_periodos.dart';
-
+/*
+  Tela criada para que o usuário cadastre novos dados no banco de dados
+*/
 class TelaCadastro extends StatefulWidget {
   const TelaCadastro({super.key});
 
@@ -103,6 +105,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
               if (alertaAcao[0] == "") {
                 alertaAcao = await salvar();
               }
+              // SnackBar que sempre irá apresentar uma msg para o usuário de erro ou não
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(alertaAcao[0]),

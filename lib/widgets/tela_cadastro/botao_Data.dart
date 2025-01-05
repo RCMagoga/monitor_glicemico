@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class BotaoData extends StatefulWidget {
-
+  // Recebe a função vinda de tela de cadastro para atualizar os dados da tela e inserir no Db
   final Function setDataSelecionada;
 
   const BotaoData(this.setDataSelecionada, {super.key});
@@ -18,7 +18,7 @@ class _BotaoDataState extends State<BotaoData> {
   // Formatação padrão de apresentação de datas
   DateFormat formatacaoPadrao = DateFormat('dd/MM/yyyy');
 
-  // Abre a tela para selecionar a data e recarrega a tela com a data selecionada
+  // Abre a tela (DatePicker) para selecionar a data e recarrega a tela com a data selecionada
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selecionado = await showDatePicker(
       context: context,

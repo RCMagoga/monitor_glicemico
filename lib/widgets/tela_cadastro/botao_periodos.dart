@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class BotaoPeriodos extends StatefulWidget {
-  
+  // Recebe a função para alterar os dados da tela de cadastro e inserir no Db
   final Function setPeriodoSelecionado;
   
   const BotaoPeriodos(this.setPeriodoSelecionado, {super.key});

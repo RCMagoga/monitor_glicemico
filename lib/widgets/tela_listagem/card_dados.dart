@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
-
+/*
+  Widget criado para apresentar um Card formatado dentro do SlidableCard()
+*/
 class CardDados extends StatelessWidget {
+  // Armazena cada entidade de Coleta para apresentar ao usuário
   final Coleta coleta;
   const CardDados(this.coleta, {super.key});
 

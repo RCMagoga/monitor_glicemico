@@ -4,6 +4,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
 class Db {
+  // Usado para criar um padrão Singleton, pois métodos estáticos não recebe parâmetro.
   static final Db _db = Db._internal();
 
   factory Db() {
@@ -22,11 +23,6 @@ class Db {
         await db
             .execute(
           "CREATE TABLE coletas (id INTEGER PRIMARY KEY, data TIMESTAMP, jejum INTEGER, almoco INTEGER, jantar INTEGER, obsJejum TEXT, obsAlmoco TEXT, obsJantar TEXT)",
-        )
-            .then(
-          (value) {
-            print("Criou db");
-          },
         );
       },
     );
@@ -35,12 +31,15 @@ class Db {
 
   Future<int> salvarColeta(Coleta coleta, String atualizaPeriodo) async {
     Database db = await openDb();
+    // Armazena o retorna para mostrar msg para o usuário
     int resposta = -1;
     DateFormat formatacaoSalvar = DateFormat('yyyy-MM-dd');
+    // Faz a busca pela data para escolher entre criar novo dado ou inserir um novo
     List<Map> busca = await db.rawQuery(
       "SELECT * FROM coletas WHERE data = ?",
       [formatacaoSalvar.format(coleta.data)],
     );
+    // Insere um dado novo no Db, caso a 'busca' esteja vazia
     if (db.isOpen && busca.isEmpty) {
       await db.transaction(
         (txn) async {
@@ -58,6 +57,7 @@ class Db {
           );
         },
       );
+    // Faz a alteração de um dado já existente, caso a busca seja diferente de 0
     } else {
       String sql = "";
       List<dynamic> alteracoesSQL = ["", "", formatacaoSalvar.format(coleta.data)];

@@ -3,9 +3,16 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
 import 'package:monitor_glicemico/widgets/tela_listagem/card_dados.dart';
-
+/*
+  Widget criado que irá criar um CardDados() com a função de slide do card onde, ao
+  arrastar o card para a direita, irá aparecer botão de delete à esquerda e, ao
+  arrastar o card para a esquerda, irá aparecer botão de editar à direita e o usuário
+  será levado a tela de edição.
+*/ 
 class SlidableCard extends StatelessWidget {
+  // Armazena as coletas recuperadas do Db
   final List<Map> coletas;
+  // Formata os dados 'coleta.data' para DateTime
   final DateFormat stringToDate = DateFormat('yyyy-MM-dd');
   SlidableCard(this.coletas, {super.key});
 

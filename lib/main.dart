@@ -37,6 +37,7 @@ class MainApp extends StatelessWidget {
         body: Center(
           child: TelaListagem(),
         ),
+        // Botão que irá abrir a tela de cadastro
         floatingActionButton: Builder(
           builder: (context) => FloatingActionButton(
             backgroundColor: Colors.blue,
