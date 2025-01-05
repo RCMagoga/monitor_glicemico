@@ -27,6 +27,20 @@ class _TelaCadastroState extends State<TelaCadastro> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cadastro'),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Db().deletarDb();
+            },
+            icon: Icon(Icons.delete),
+          ),
+          IconButton(
+            onPressed: () {
+              Db().buscarColetas();
+            },
+            icon: Icon(Icons.find_in_page),
+          ),
+        ],
       ),
       body: Column(
         spacing: 20,
@@ -88,13 +102,19 @@ class _TelaCadastroState extends State<TelaCadastro> {
               //----------------------------------------- Salvar no banco de dados com msg
               if (alertaAcao[0] == "") {
                 alertaAcao = await salvar();
-                print('asd');
               }
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(alertaAcao[0]),
                   backgroundColor: alertaAcao[1],
                   duration: Duration(seconds: 2),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(10),
+                    ),
+                  ),
+                  showCloseIcon: true,
                 ),
               );
             },
@@ -162,8 +182,16 @@ class _TelaCadastroState extends State<TelaCadastro> {
       obsPeriodo[2] = _controllerObservacao.text;
     }
     int id = await db.salvarColeta(
-      Coleta(dataSelecionada, valorPeriodo[0], valorPeriodo[1], valorPeriodo[2],
-          obsPeriodo[0], obsPeriodo[1], obsPeriodo[1]),
+      Coleta(
+        dataSelecionada,
+        valorPeriodo[0],
+        valorPeriodo[1],
+        valorPeriodo[2],
+        obsPeriodo[0],
+        obsPeriodo[1],
+        obsPeriodo[2],
+      ),
+      periodoSelecionado,
     );
     List<dynamic> resposta = ["", ""];
     if (id >= 0) {
