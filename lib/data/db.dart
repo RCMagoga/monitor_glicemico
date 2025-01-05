@@ -84,13 +84,11 @@ class Db {
     return resposta;
   }
 
-  void buscarColetas() async {
+  Future<List<Map>> buscarColetas() async {
     Database db = await openDb();
     List<Map> lista = await db.rawQuery("SELECT * FROM coletas ORDER BY data");
-    for (var list in lista) {
-      print(list);
-    }
     db.close();
+    return lista;
   }
 
   void deletarDb() async {

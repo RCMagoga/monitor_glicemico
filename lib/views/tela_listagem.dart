@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_slidable/flutter_slidable.dart';
-import 'package:monitor_glicemico/widgets/tela_listagem/card_dados.dart';
+import 'package:monitor_glicemico/data/db.dart';
+import 'package:monitor_glicemico/widgets/tela_listagem/slidable_card.dart';
 
 class TelaListagem extends StatefulWidget {
   const TelaListagem({super.key});
@@ -17,92 +17,20 @@ class _TelaListagemState extends State<TelaListagem> {
         title: Text("Lista"),
       ),
       body: FutureBuilder(
-        future: null,
+        future: Db().buscarColetas(),
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return SlidableAutoCloseBehavior(
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.only(top: 10, left: 5),
-                itemCount: 3,
-                itemBuilder: (context, index) {
-                  return Slidable(
-                    startActionPane: ActionPane(
-                      extentRatio: 0.25,
-                      motion: const ScrollMotion(),
-                      children: [
-                        CustomSlidableAction(
-                          onPressed: (context) {
-                            showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Container();
-                              },
-                            );
-                          },
-                          backgroundColor: Colors.red,
-                          padding: EdgeInsets.all(5),
-                          borderRadius: BorderRadius.only(
-                            topRight: Radius.circular(25),
-                            bottomRight: Radius.circular(25),
-                          ),
-                          autoClose: true,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.delete,
-                                color: Colors.white,
-                                size: 22,
-                              ),
-                              Text("Deletar"),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    endActionPane: ActionPane(
-                      extentRatio: 0.25,
-                      motion: const ScrollMotion(),
-                      children: [
-                        CustomSlidableAction(
-                          onPressed: (context) {},
-                          backgroundColor: Colors.blue,
-                          foregroundColor: Colors.white,
-                          borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(25),
-                            bottomLeft: Radius.circular(25),
-                          ),
-                          autoClose: true,
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Icon(
-                                Icons.edit,
-                                color: Colors.white,
-                                size: 22,
-                              ),
-                              Text("Editar"),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                    child: CardDados(),
-                  );
-                },
-              ),
-            );
-          }
-          if (!snapshot.hasData) {
+          if (snapshot.hasData &&
+              snapshot.connectionState == ConnectionState.done) {
+            return SlidableCard(snapshot.data!);
+          } else if (snapshot.connectionState == ConnectionState.done &&
+              !snapshot.hasData) {
             return Center(
               child: Text(
                 "Nenhum dado encontrado!",
                 style: TextStyle(fontSize: 22),
               ),
             );
-          }
-          if (!snapshot.hasError) {
+          } else if (!snapshot.hasError && snapshot.connectionState == ConnectionState.done) {
             return Center(
               child: Text(
                 "Erro ao buscar dados!",

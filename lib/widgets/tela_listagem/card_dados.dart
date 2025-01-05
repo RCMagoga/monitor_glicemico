@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:monitor_glicemico/models/coleta.dart';
 
 class CardDados extends StatelessWidget {
-  const CardDados({super.key});
+  final Coleta coleta;
+  const CardDados(this.coleta, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,26 +15,26 @@ class CardDados extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: <Widget>[
-            Text('asd'),
+            Text('${coleta.data.day.toString().padLeft(2, '0')}/${coleta.data.month.toString().padLeft(2, '0')}/${coleta.data.year}'),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("Jejum"),
-                Text('asd'),
+                Text(coleta.jejum.toString()),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("Almoço"),
-                Text('asd'),
+                Text(coleta.almoco.toString()),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 Text("Jantar"),
-                Text('asd'),
+                Text(coleta.jantar.toString()),
               ],
             ),
           ],

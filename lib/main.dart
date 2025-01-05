@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:monitor_glicemico/views/tela_cadastro.dart';
+import 'package:monitor_glicemico/views/tela_listagem.dart';
 
 void main() {
   runApp(MainApp());
@@ -30,7 +30,7 @@ class MainApp extends StatelessWidget {
       theme: temaPadrao,
       home: Scaffold(
         body: Center(
-          child: TelaCadastro(),
+          child: TelaListagem(),
         ),
       ),
     );
