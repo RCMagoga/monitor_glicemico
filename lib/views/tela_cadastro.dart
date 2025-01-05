@@ -23,6 +23,8 @@ class _TelaCadastroState extends State<TelaCadastro> {
   // Armazanam os dados da glicemia e observações, respectivamente
   final TextEditingController _controllerGlicemia = TextEditingController();
   final TextEditingController _controllerObservacao = TextEditingController();
+  // Usado para fechar a tela se o salvamento for bem sucedido
+  bool fecharTela = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,12 +32,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
       appBar: AppBar(
         title: Text('Cadastro'),
         actions: [
+        //--------------------------------------------------Botão para teste - DELETAR
           IconButton(
             onPressed: () {
               Db().deletarDb();
             },
             icon: Icon(Icons.delete),
           ),
+        //--------------------------------------------------Botão para teste - DELETAR
           IconButton(
             onPressed: () {
               Db().buscarColetas();
@@ -120,6 +124,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
                   showCloseIcon: true,
                 ),
               );
+              if (fecharTela) { Navigator.pop(context); };
             },
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(Colors.blue),
@@ -201,6 +206,7 @@ class _TelaCadastroState extends State<TelaCadastro> {
       resposta[0] = "Dados salvos com sucesso!";
       resposta[1] = Colors.green;
       limparTela();
+      fecharTela = true;
     } else {
       resposta[0] = "Erro ao salvar no banco de dados!";
       resposta[1] = Colors.red;

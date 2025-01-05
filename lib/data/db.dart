@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class Db {
+class Db extends ChangeNotifier{
   // Usado para criar um padrão Singleton, pois métodos estáticos não recebe parâmetro.
   static final Db _db = Db._internal();
 
@@ -81,6 +82,7 @@ class Db {
       );
     }
     db.close();
+    notifyListeners();
     return resposta;
   }
 
