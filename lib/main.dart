@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:monitor_glicemico/views/tela_cadastro.dart';
 import 'package:monitor_glicemico/views/tela_listagem.dart';
 
 void main() {
@@ -12,6 +13,10 @@ class MainApp extends StatelessWidget {
   final ThemeData temaPadrao = ThemeData(
     primarySwatch: Colors.blue,
     appBarTheme: AppBarTheme(
+      iconTheme: IconThemeData(
+        color: Colors.white,
+        size: 28,
+      ),
       centerTitle: true,
       backgroundColor: Colors.blue,
       titleTextStyle: TextStyle(
@@ -31,6 +36,25 @@ class MainApp extends StatelessWidget {
       home: Scaffold(
         body: Center(
           child: TelaListagem(),
+        ),
+        floatingActionButton: Builder(
+          builder: (context) => FloatingActionButton(
+            backgroundColor: Colors.blue,
+            foregroundColor: Colors.white,
+            elevation: 5,
+            child: Icon(
+              Icons.add,
+              size: 40,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TelaCadastro(),
+                ),
+              );
+            },
+          ),
         ),
       ),
     );
