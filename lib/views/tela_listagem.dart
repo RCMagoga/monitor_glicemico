@@ -25,12 +25,13 @@ class _TelaListagemState extends State<TelaListagem> {
           future: Db().buscarColetas(),
           builder: (context, snapshot) {
             // Carrega os dados na tela quando forem recuperados do banco de dados
-            if (snapshot.hasData &&
+            if (snapshot.hasData && snapshot.data!.isNotEmpty &&
                 snapshot.connectionState == ConnectionState.done) {
               return SlidableCard(snapshot.data!);
               // Apresneta msg para o caso de não ter dados no banco de dados
-            } else if (snapshot.connectionState == ConnectionState.done &&
-                !snapshot.hasData) {
+            }
+            if (snapshot.data!.isEmpty &&
+                snapshot.connectionState == ConnectionState.done) {
               return Center(
                 child: Text(
                   "Nenhum dado encontrado!",
@@ -38,7 +39,8 @@ class _TelaListagemState extends State<TelaListagem> {
                 ),
               );
               // Apresenta msg de erro caso ocorra um erro na conexão com o banco de dados
-            } else if (!snapshot.hasError &&
+            }
+            if (!snapshot.hasError &&
                 snapshot.connectionState == ConnectionState.done) {
               return Center(
                 child: Text(
@@ -47,11 +49,10 @@ class _TelaListagemState extends State<TelaListagem> {
                 ),
               );
               // Apresenta um circulo de carregamento durante a busco por dados no banco de dados
-            } else {
-              return Center(
-                child: CircularProgressIndicator(),
-              );
             }
+            return Center(
+              child: CircularProgressIndicator(),
+            );
           },
         ),
       ),

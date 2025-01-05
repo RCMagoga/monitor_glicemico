@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
-import 'package:monitor_glicemico/widgets/tela_cadastro/botao_Data.dart';
+import 'package:monitor_glicemico/widgets/snackBar_custom.dart';
+import 'package:monitor_glicemico/widgets/tela_cadastro/botao_data.dart';
 import 'package:monitor_glicemico/widgets/tela_cadastro/botao_periodos.dart';
+
 /*
   Tela criada para que o usuário cadastre novos dados no banco de dados
 */
@@ -32,14 +34,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
       appBar: AppBar(
         title: Text('Cadastro'),
         actions: [
-        //--------------------------------------------------Botão para teste - DELETAR
+          //--------------------------------------------------Botão para teste - DELETAR
           IconButton(
             onPressed: () {
               Db().deletarDb();
             },
             icon: Icon(Icons.delete),
           ),
-        //--------------------------------------------------Botão para teste - DELETAR
+          //--------------------------------------------------Botão para teste - DELETAR
           IconButton(
             onPressed: () {
               Db().buscarColetas();
@@ -110,21 +112,14 @@ class _TelaCadastroState extends State<TelaCadastro> {
                 alertaAcao = await salvar();
               }
               // SnackBar que sempre irá apresentar uma msg para o usuário de erro ou não
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(alertaAcao[0]),
-                  backgroundColor: alertaAcao[1],
-                  duration: Duration(seconds: 2),
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(10),
-                    ),
-                  ),
-                  showCloseIcon: true,
-                ),
+              SnackbarCustom.showCustomSnackbar(
+                context,
+                alertaAcao[0],
+                alertaAcao[1],
               );
-              if (fecharTela) { Navigator.pop(context); };
+              if (fecharTela) {
+                Navigator.pop(context);
+              }
             },
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(Colors.blue),

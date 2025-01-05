@@ -93,6 +93,14 @@ class Db extends ChangeNotifier{
     return lista;
   }
 
+  Future<int> deletarColeta(int id) async{
+    Database db = await openDb();
+    int resposta = await db.rawDelete("DELETE FROM coletas WHERE id = ?", [id]);
+    notifyListeners();
+    db.close();
+    return resposta;
+  }
+
   void deletarDb() async {
     Database db = await openDb();
     await deleteDatabase(db.path);
