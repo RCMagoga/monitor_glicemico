@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
+import 'package:monitor_glicemico/widgets/snackBar_custom.dart';
 import 'package:monitor_glicemico/widgets/tela_cadastro/botao_data.dart';
 import 'package:monitor_glicemico/widgets/tela_edicao/edit_dados.dart';
 
@@ -36,14 +37,6 @@ class _TelaEdicaoState extends State<TelaEdicao> {
             setDataSelecionada,
             dataSelecionada: widget.coleta.data,
           ),
-          /*Text(
-            dataFormatada,
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 32,
-              fontWeight: FontWeight.bold,
-            ),
-          ),*/
           EditarDados(widget.coleta, 'Jejum', setDadosAlterados),
           EditarDados(widget.coleta, 'Almoço', setDadosAlterados),
           EditarDados(widget.coleta, 'Jantar', setDadosAlterados),
@@ -56,9 +49,50 @@ class _TelaEdicaoState extends State<TelaEdicao> {
               style: ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.blue),
               ),
-              onPressed: () {
-                /*Db().editarDados(widget.coleta, novaData);
-                Navigator.pop(context);*/
+              onPressed: () async {
+                if (dadosAlterados) {
+                  var alterarDados = await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: Text('Salvar'),
+                        content: Text("Deseja salvar as alterações?"),
+                        actions: [
+                          TextButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context, 'Não');
+                            },
+                            label: Text('Não'),
+                          ),
+                          TextButton.icon(
+                            onPressed: () {
+                              Navigator.pop(context, 'Sim');
+                            },
+                            label: Text('Sim'),
+                          )
+                        ],
+                      );
+                    },
+                  );
+                  if (alterarDados == 'Sim') {
+                    int resposta =
+                        await Db().editarDados(widget.coleta, novaData);
+                    if (resposta == -1) {
+                      SnackbarCustom.showCustomSnackbar(
+                        context,
+                        'Erro ao salvar! Tente novamente.',
+                        Colors.red,
+                      );
+                    } else {
+                      SnackbarCustom.showCustomSnackbar(
+                        context,
+                        'Dados alterados com sucesso!',
+                        Colors.green,
+                      );
+                      Navigator.pop(context);
+                    }
+                  }
+                }
               },
               child: Text(
                 "Salvar",
@@ -80,7 +114,7 @@ class _TelaEdicaoState extends State<TelaEdicao> {
   }
 
   // Método ser para controlar caso algum dado tenha sido alterado
-  void setDadosAlterados(bool alterado){
+  void setDadosAlterados(bool alterado) {
     dadosAlterados = alterado;
   }
 }
