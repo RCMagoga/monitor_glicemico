@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 class BotaoData extends StatefulWidget {
   // Recebe a função vinda de tela de cadastro para atualizar os dados da tela e inserir no Db
   final Function setDataSelecionada;
+  /*  Variavel utilizada pela classe 'TelaEdicao' para auxiliar caso tenha alteração de data
+      Parâmetro obrigatório para a classe 'TelaEdicao'*/
   final DateTime? dataSelecionada;
 
   const BotaoData(this.setDataSelecionada, {this.dataSelecionada, super.key});

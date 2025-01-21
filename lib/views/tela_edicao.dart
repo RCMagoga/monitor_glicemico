@@ -15,6 +15,7 @@ class TelaEdicao extends StatefulWidget {
 
 class _TelaEdicaoState extends State<TelaEdicao> {
   String dataFormatada = "";
+  bool dadosAlterados = false;
   late DateTime novaData;
   @override
   Widget build(BuildContext context) {
@@ -43,9 +44,9 @@ class _TelaEdicaoState extends State<TelaEdicao> {
               fontWeight: FontWeight.bold,
             ),
           ),*/
-          EditarDados(widget.coleta, 'Jejum'),
-          EditarDados(widget.coleta, 'Almoço'),
-          EditarDados(widget.coleta, 'Jantar'),
+          EditarDados(widget.coleta, 'Jejum', setDadosAlterados),
+          EditarDados(widget.coleta, 'Almoço', setDadosAlterados),
+          EditarDados(widget.coleta, 'Jantar', setDadosAlterados),
           SizedBox(
             height: 10,
           ),
@@ -56,8 +57,8 @@ class _TelaEdicaoState extends State<TelaEdicao> {
                 backgroundColor: WidgetStatePropertyAll(Colors.blue),
               ),
               onPressed: () {
-                Db().editarDados(widget.coleta, novaData);
-                Navigator.pop(context);
+                /*Db().editarDados(widget.coleta, novaData);
+                Navigator.pop(context);*/
               },
               child: Text(
                 "Salvar",
@@ -76,5 +77,10 @@ class _TelaEdicaoState extends State<TelaEdicao> {
   // Metodo set para alterar a data selecionada
   void setDataSelecionada(DateTime data) {
     novaData = data;
+  }
+
+  // Método ser para controlar caso algum dado tenha sido alterado
+  void setDadosAlterados(bool alterado){
+    dadosAlterados = alterado;
   }
 }

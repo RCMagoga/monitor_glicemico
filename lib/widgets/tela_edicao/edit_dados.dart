@@ -1,20 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
-
+// Widget personalizados para criar o card de edição de dados
 class EditarDados extends StatefulWidget {
+  // Dados da coleta selecionada para alterar
   final Coleta coleta;
+  // Periodo para preencher os cards com as informações respectivas
   final String periodo;
+  // Boolean que armazena caso tenha sido alterado qualquer dado
+  final Function dadosAlterados;
 
-  const EditarDados(this.coleta, this.periodo, {super.key});
+  const EditarDados(this.coleta, this.periodo, this.dadosAlterados, {super.key});
 
   @override
   State<EditarDados> createState() => _EditarDadosState();
 }
 
 class _EditarDadosState extends State<EditarDados> {
-  final TextEditingController _controllerGlicemia = TextEditingController();
 
+  final TextEditingController _controllerGlicemia = TextEditingController();
   final TextEditingController _controllerObs = TextEditingController();
+
+  @override
+  void dispose() {
+    _controllerGlicemia.dispose();
+    _controllerObs.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,6 +71,7 @@ class _EditarDadosState extends State<EditarDados> {
                         widget.coleta.jantar =
                             int.parse(_controllerGlicemia.text);
                       }
+                      widget.dadosAlterados(true);
                     }
                   },
                   keyboardType: TextInputType.number,
@@ -90,6 +102,7 @@ class _EditarDadosState extends State<EditarDados> {
                     widget.coleta.obsJantar = _controllerObs.text;
                     widget.coleta.jantar = int.parse(_controllerGlicemia.text);
                   }
+                  widget.dadosAlterados(true);
                 }
               },
               controller: _controllerObs,
@@ -107,7 +120,7 @@ class _EditarDadosState extends State<EditarDados> {
       ),
     );
   }
-
+  // Insere os valores já existentes nos respectivos expaços para o usuário alterar
   void recuperarValores() {
     if (widget.periodo == "Jejum") {
       _controllerGlicemia.text = widget.coleta.jejum.toString();
