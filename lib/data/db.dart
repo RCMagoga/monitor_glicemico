@@ -4,7 +4,7 @@ import 'package:monitor_glicemico/models/coleta.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 
-class Db extends ChangeNotifier{
+class Db extends ChangeNotifier {
   // Usado para criar um padrão Singleton, pois métodos estáticos não recebe parâmetro.
   static final Db _db = Db._internal();
 
@@ -21,8 +21,7 @@ class Db extends ChangeNotifier{
       dbPath,
       version: 1,
       onCreate: (db, version) async {
-        await db
-            .execute(
+        await db.execute(
           "CREATE TABLE coletas (id INTEGER PRIMARY KEY, data TIMESTAMP, jejum INTEGER, almoco INTEGER, jantar INTEGER, obsJejum TEXT, obsAlmoco TEXT, obsJantar TEXT)",
         );
       },
@@ -58,10 +57,14 @@ class Db extends ChangeNotifier{
           );
         },
       );
-    // Faz a alteração de um dado já existente, caso a busca seja diferente de 0
+      // Faz a alteração de um dado já existente, caso a busca seja diferente de 0
     } else {
       String sql = "";
-      List<dynamic> alteracoesSQL = ["", "", formatacaoSalvar.format(coleta.data)];
+      List<dynamic> alteracoesSQL = [
+        "",
+        "",
+        formatacaoSalvar.format(coleta.data)
+      ];
       if (atualizaPeriodo == "Jejum") {
         sql = "UPDATE coletas SET jejum = ?, obsJejum = ? WHERE data = ?";
         alteracoesSQL[0] = coleta.jejum;
@@ -77,10 +80,40 @@ class Db extends ChangeNotifier{
       }
       await db.transaction(
         (txn) async {
-          resposta = await txn.rawUpdate(sql,alteracoesSQL);
+          resposta = await txn.rawUpdate(sql, alteracoesSQL);
         },
       );
     }
+    db.close();
+    notifyListeners();
+    return resposta;
+  }
+
+  Future<int> editarDados(Coleta coleta, DateTime novaData) async {
+    Database db = await openDb();
+    // Armazena o retorna para mostrar msg para o usuário
+    int resposta = -1;
+    DateFormat formatacaoSalvar = DateFormat('yyyy-MM-dd');
+    if (novaData == "") {
+      novaData = coleta.data;
+    }
+    String sql =
+        "UPDATE coletas SET jejum = ?, almoco = ?, jantar= ?, obsJejum = ?, obsAlmoco = ?, obsJantar = ?, data = ? WHERE data = ?";
+    List<dynamic> alteracoesSQL = [
+      coleta.jejum,
+      coleta.almoco,
+      coleta.jantar,
+      coleta.obsJejum,
+      coleta.obsAlmoco,
+      coleta.obsJantar,
+      formatacaoSalvar.format(novaData),
+      formatacaoSalvar.format(coleta.data),
+    ];
+    await db.transaction(
+      (txn) async {
+        resposta = await txn.rawUpdate(sql, alteracoesSQL);
+      },
+    );
     db.close();
     notifyListeners();
     return resposta;
@@ -93,7 +126,7 @@ class Db extends ChangeNotifier{
     return lista;
   }
 
-  Future<int> deletarColeta(int id) async{
+  Future<int> deletarColeta(int id) async {
     Database db = await openDb();
     int resposta = await db.rawDelete("DELETE FROM coletas WHERE id = ?", [id]);
     notifyListeners();

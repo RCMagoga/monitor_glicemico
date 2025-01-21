@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
+import 'package:monitor_glicemico/views/tela_edicao.dart';
 
 /*
   Widget criado para apresentar um Card formatado dentro do SlidableCard()
 */
-class CardDados extends StatelessWidget {
+class CardDados extends StatefulWidget {
   // Armazena cada entidade de Coleta para apresentar ao usuário
   final Coleta coleta;
-  CardDados(this.coleta, {super.key});
+  const CardDados(this.coleta, {super.key});
 
+  @override
+  State<CardDados> createState() => _CardDadosState();
+}
+
+class _CardDadosState extends State<CardDados> {
   late String dataFormatada;
 
   @override
   Widget build(BuildContext context) {
     dataFormatada =
-        '${coleta.data.day.toString().padLeft(2, '0')}/${coleta.data.month.toString().padLeft(2, '0')}/${coleta.data.year}';
+        '${widget.coleta.data.day.toString().padLeft(2, '0')}/${widget.coleta.data.month.toString().padLeft(2, '0')}/${widget.coleta.data.year}';
     return SizedBox(
       width: MediaQuery.of(context).size.width - 10,
       height: 100,
@@ -29,24 +35,24 @@ class CardDados extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text("Jejum"),
-                Text(coleta.jejum.toString()),
-                getInfoButton(context, coleta.obsJejum, "Jejum"),
+                Text(widget.coleta.jejum.toString()),
+                getInfoButton(context, widget.coleta.obsJejum, "Jejum"),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text("Almoço"),
-                Text(coleta.almoco.toString()),
-                getInfoButton(context, coleta.obsAlmoco, "Almoço"),
+                Text(widget.coleta.almoco.toString()),
+                getInfoButton(context, widget.coleta.obsAlmoco, "Almoço"),
               ],
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
                 Text("Jantar"),
-                Text(coleta.jantar.toString()),
-                getInfoButton(context, coleta.obsJantar, "Jantar"),
+                Text(widget.coleta.jantar.toString()),
+                getInfoButton(context, widget.coleta.obsJantar, "Jantar"),
               ],
             ),
           ],
@@ -65,7 +71,7 @@ class CardDados extends StatelessWidget {
         padding: EdgeInsets.all(0),
         constraints: BoxConstraints(maxHeight: 20, maxWidth: 20),
         onPressed: () {
-          openAlertInfo(context, coleta, periodoSelecionado, obs);
+          openAlertInfo(context, widget.coleta, periodoSelecionado, obs);
         },
         icon: Icon(
           Icons.segment,
@@ -100,6 +106,12 @@ class CardDados extends StatelessWidget {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => TelaEdicao(coleta),
+                ),
+              );
             },
             child: Text("Editar"),
           ),

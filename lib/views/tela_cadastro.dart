@@ -33,22 +33,6 @@ class _TelaCadastroState extends State<TelaCadastro> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Cadastro'),
-        actions: [
-          //--------------------------------------------------Botão para teste - DELETAR
-          IconButton(
-            onPressed: () {
-              Db().deletarDb();
-            },
-            icon: Icon(Icons.delete),
-          ),
-          //--------------------------------------------------Botão para teste - DELETAR
-          IconButton(
-            onPressed: () {
-              Db().buscarColetas();
-            },
-            icon: Icon(Icons.find_in_page),
-          ),
-        ],
       ),
       body: Column(
         spacing: 20,

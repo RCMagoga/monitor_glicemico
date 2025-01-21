@@ -4,8 +4,9 @@ import 'package:intl/intl.dart';
 class BotaoData extends StatefulWidget {
   // Recebe a função vinda de tela de cadastro para atualizar os dados da tela e inserir no Db
   final Function setDataSelecionada;
+  final DateTime? dataSelecionada;
 
-  const BotaoData(this.setDataSelecionada, {super.key});
+  const BotaoData(this.setDataSelecionada, {this.dataSelecionada, super.key});
 
   @override
   State<BotaoData> createState() => _BotaoDataState();
@@ -13,7 +14,7 @@ class BotaoData extends StatefulWidget {
 
 class _BotaoDataState extends State<BotaoData> {
   // Inicializa a variavel data para controle da data em OutLineButton
-  DateTime agora = DateTime.now();
+  late DateTime agora = widget.dataSelecionada ?? DateTime.now();
 
   // Formatação padrão de apresentação de datas
   DateFormat formatacaoPadrao = DateFormat('dd/MM/yyyy');
@@ -22,7 +23,7 @@ class _BotaoDataState extends State<BotaoData> {
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? selecionado = await showDatePicker(
       context: context,
-      initialDate: DateTime(agora.year, agora.month, agora.day),
+      initialDate: widget.dataSelecionada ?? DateTime(agora.year, agora.month, agora.day),
       firstDate: DateTime(2022),
       lastDate: DateTime(2030),
     );

@@ -3,6 +3,7 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:intl/intl.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
+import 'package:monitor_glicemico/views/tela_edicao.dart';
 import 'package:monitor_glicemico/widgets/snackBar_custom.dart';
 import 'package:monitor_glicemico/widgets/tela_listagem/card_dados.dart';
 
@@ -58,12 +59,19 @@ class SlidableCard extends StatelessWidget {
                             child: Text('Não'),
                           ),
                           TextButton(
-                              onPressed: () async{
-                                int resposta = await Db().deletarColeta(coleta.id!);
+                              onPressed: () async {
+                                int resposta =
+                                    await Db().deletarColeta(coleta.id!);
                                 if (resposta == 1) {
-                                  SnackbarCustom.showCustomSnackbar(context, "Dados deletado com sucesso", Colors.green);
-                                }else{
-                                  SnackbarCustom.showCustomSnackbar(context, "Não foi possível deletar os dados!\nTente novamente.", Colors.red);
+                                  SnackbarCustom.showCustomSnackbar(
+                                      context,
+                                      "Dados deletado com sucesso",
+                                      Colors.green);
+                                } else {
+                                  SnackbarCustom.showCustomSnackbar(
+                                      context,
+                                      "Não foi possível deletar os dados!\nTente novamente.",
+                                      Colors.red);
                                 }
                                 Navigator.pop(context);
                               },
@@ -98,7 +106,14 @@ class SlidableCard extends StatelessWidget {
               motion: const ScrollMotion(),
               children: [
                 CustomSlidableAction(
-                  onPressed: (context) {},
+                  onPressed: (context) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => TelaEdicao(coleta),
+                      ),
+                    );
+                  },
                   backgroundColor: Colors.blue,
                   foregroundColor: Colors.white,
                   borderRadius: BorderRadius.only(
