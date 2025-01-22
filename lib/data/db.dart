@@ -89,34 +89,39 @@ class Db extends ChangeNotifier {
     return resposta;
   }
 
-  Future<int> editarDados(Coleta coleta, DateTime novaData) async {
-    Database db = await openDb();
-    // Armazena o retorna para mostrar msg para o usuário
-    int resposta = -1;
-    DateFormat formatacaoSalvar = DateFormat('yyyy-MM-dd');
-    if (novaData == "") {
-      novaData = coleta.data;
+  Future<int> editarDados(
+      Coleta coleta, DateTime novaData, {bool alterar = true}) async {
+    if (alterar) {
+      Database db = await openDb();
+      // Armazena o retorna para mostrar msg para o usuário
+      int resposta = -1;
+      DateFormat formatacaoSalvar = DateFormat('yyyy-MM-dd');
+      if (novaData == "") {
+        novaData = coleta.data;
+      }
+      String sql =
+          "UPDATE coletas SET jejum = ?, almoco = ?, jantar= ?, obsJejum = ?, obsAlmoco = ?, obsJantar = ?, data = ? WHERE data = ?";
+      List<dynamic> alteracoesSQL = [
+        coleta.jejum,
+        coleta.almoco,
+        coleta.jantar,
+        coleta.obsJejum,
+        coleta.obsAlmoco,
+        coleta.obsJantar,
+        formatacaoSalvar.format(novaData),
+        formatacaoSalvar.format(coleta.data),
+      ];
+      await db.transaction(
+        (txn) async {
+          resposta = await txn.rawUpdate(sql, alteracoesSQL);
+        },
+      );
+      db.close();
+      notifyListeners();
+      return resposta;
     }
-    String sql =
-        "UPDATE coletas SET jejum = ?, almoco = ?, jantar= ?, obsJejum = ?, obsAlmoco = ?, obsJantar = ?, data = ? WHERE data = ?";
-    List<dynamic> alteracoesSQL = [
-      coleta.jejum,
-      coleta.almoco,
-      coleta.jantar,
-      coleta.obsJejum,
-      coleta.obsAlmoco,
-      coleta.obsJantar,
-      formatacaoSalvar.format(novaData),
-      formatacaoSalvar.format(coleta.data),
-    ];
-    await db.transaction(
-      (txn) async {
-        resposta = await txn.rawUpdate(sql, alteracoesSQL);
-      },
-    );
-    db.close();
     notifyListeners();
-    return resposta;
+    return -1;
   }
 
   Future<List<Map>> buscarColetas() async {

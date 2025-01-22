@@ -49,51 +49,7 @@ class _TelaEdicaoState extends State<TelaEdicao> {
               style: ButtonStyle(
                 backgroundColor: WidgetStatePropertyAll(Colors.blue),
               ),
-              onPressed: () async {
-                if (dadosAlterados) {
-                  var alterarDados = await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return AlertDialog(
-                        title: Text('Salvar'),
-                        content: Text("Deseja salvar as alterações?"),
-                        actions: [
-                          TextButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context, 'Não');
-                            },
-                            label: Text('Não'),
-                          ),
-                          TextButton.icon(
-                            onPressed: () {
-                              Navigator.pop(context, 'Sim');
-                            },
-                            label: Text('Sim'),
-                          )
-                        ],
-                      );
-                    },
-                  );
-                  if (alterarDados == 'Sim') {
-                    int resposta =
-                        await Db().editarDados(widget.coleta, novaData);
-                    if (resposta == -1) {
-                      SnackbarCustom.showCustomSnackbar(
-                        context,
-                        'Erro ao salvar! Tente novamente.',
-                        Colors.red,
-                      );
-                    } else {
-                      SnackbarCustom.showCustomSnackbar(
-                        context,
-                        'Dados alterados com sucesso!',
-                        Colors.green,
-                      );
-                      Navigator.pop(context);
-                    }
-                  }
-                }
-              },
+              onPressed: acaoBotaoSalvar,
               child: Text(
                 "Salvar",
                 style: TextStyle(
@@ -111,10 +67,58 @@ class _TelaEdicaoState extends State<TelaEdicao> {
   // Metodo set para alterar a data selecionada
   void setDataSelecionada(DateTime data) {
     novaData = data;
+    dadosAlterados = true;
   }
 
   // Método ser para controlar caso algum dado tenha sido alterado
   void setDadosAlterados(bool alterado) {
     dadosAlterados = alterado;
+  }
+
+  // Função que o botão salvar executará
+  void acaoBotaoSalvar() async {
+    if (dadosAlterados) {
+      var alterarDados = await showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text('Salvar'),
+            content: Text("Deseja salvar as alterações?"),
+            actions: [
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pop(context, false);
+                },
+                label: Text('Não'),
+              ),
+              TextButton.icon(
+                onPressed: () {
+                  Navigator.pop(context, true);
+                },
+                label: Text('Sim'),
+              )
+            ],
+          );
+        },
+      );
+      int resposta = await Db()
+          .editarDados(widget.coleta, novaData, alterar: alterarDados);
+      if (alterarDados) {
+        if (resposta == -1) {
+          SnackbarCustom.showCustomSnackbar(
+            context,
+            'Erro ao salvar! Tente novamente.',
+            Colors.red,
+          );
+        } else {
+          SnackbarCustom.showCustomSnackbar(
+            context,
+            'Dados alterados com sucesso!',
+            Colors.green,
+          );
+        }
+      }
+      Navigator.pop(context);
+    }
   }
 }
