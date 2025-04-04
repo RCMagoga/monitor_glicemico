@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/data/db.dart';
 import 'package:monitor_glicemico/models/coleta.dart';
+import 'package:monitor_glicemico/models/pdfGenerator.dart';
 import 'package:monitor_glicemico/widgets/snackBar_custom.dart';
 import 'package:monitor_glicemico/widgets/tela_cadastro/botao_data.dart';
 import 'package:monitor_glicemico/widgets/tela_cadastro/botao_periodos.dart';

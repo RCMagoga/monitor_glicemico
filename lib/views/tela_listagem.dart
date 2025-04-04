@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:monitor_glicemico/data/db.dart';
+import 'package:monitor_glicemico/models/pdfGenerator.dart';
 import 'package:monitor_glicemico/widgets/tela_listagem/slidable_card.dart';
 import 'package:provider/provider.dart';
 
@@ -14,15 +15,21 @@ class TelaListagem extends StatefulWidget {
 }
 
 class _TelaListagemState extends State<TelaListagem> {
+  late List<Map> list;
   @override
   Widget build(BuildContext context) {
     return Consumer<Db>(
       builder: (context, value, child) => Scaffold(
         appBar: AppBar(
+          actions: [
+            IconButton(onPressed: (){
+              Pdfgenerator().generatePdf(list);
+            }, icon: Icon(Icons.picture_as_pdf),),
+          ],
           title: Text("Lista"),
         ),
         body: FutureBuilder(
-          future: Db().buscarColetas(),
+          future: getDbData(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
               // Carrega os dados na tela quando forem recuperados do banco de dados
@@ -57,4 +64,10 @@ class _TelaListagemState extends State<TelaListagem> {
       ),
     );
   }
+
+  Future<List<Map>> getDbData() async{
+    list = await Db().buscarColetas();
+    return list;
+  }
+
 }
